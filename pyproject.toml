@@ -1,0 +1,22 @@
+[project]
+name = "software-engineering-glossary"
+version = "0.1.0"
+description = "Static site generator for the software engineering glossary"
+requires-python = ">=3.12"
+dependencies = [
+    "markdown>=3.7,<4",
+    "pyyaml>=6.0,<7",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0",
+]
+
+[tool.uv]
+# The generator is run in place (`uv run python -m glossary`), not installed.
+package = false
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
