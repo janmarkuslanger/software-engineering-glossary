@@ -68,3 +68,18 @@ def test_markup_in_a_term_name_is_escaped():
     page = render_site([Term("xss", "<script>", "Body.")])["term/xss/index.html"]
 
     assert "<h1>&lt;script&gt;</h1>" in page
+
+
+def test_every_page_links_the_self_hosted_font_stylesheet():
+    for path, page in pages().items():
+        assert "fonts.css" in page, path
+        assert "fonts.googleapis.com" not in page, path
+        assert "fonts.gstatic.com" not in page, path
+
+
+def test_footer_links_the_repository():
+    for path, page in pages().items():
+        assert (
+            '<a href="https://github.com/janmarkuslanger/software-engineering-glossary"'
+            ' rel="noopener noreferrer">GitHub</a>'
+        ) in page, path

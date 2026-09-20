@@ -68,6 +68,7 @@ and under a project path such as `/software-engineering-glossary/`.
 | `glossary/parser.py` | markdown file → `Term`, with validation |
 | `glossary/render.py` | terms → `{page path: HTML}` |
 | `glossary/build.py` | the only filesystem layer: read, render, write |
-| `assets/style.css` | stylesheet, copied into the output as-is |
+| `assets/` | stylesheet and self-hosted fonts, copied into the output as-is |
+| `scripts/fetch_fonts.py` | one-off: re-vendor the webfonts from Google Fonts |
 | `tests/` | pytest suite |
 | `pyproject.toml`, `uv.lock` | dependencies, pinned by uv |

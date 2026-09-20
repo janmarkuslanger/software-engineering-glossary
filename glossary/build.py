@@ -7,7 +7,7 @@ from pathlib import Path
 
 from .models import Term
 from .parser import TermError, parse_term
-from .render import STYLESHEET, render_site
+from .render import render_site
 
 ASSETS_DIR = Path(__file__).resolve().parent.parent / "assets"
 
@@ -39,15 +39,23 @@ def build(source_dir: Path, output_dir: Path) -> list[Path]:
         target.write_text(content, encoding="utf-8")
         written.append(target)
 
-    stylesheet = output_dir / STYLESHEET
-    shutil.copyfile(ASSETS_DIR / STYLESHEET, stylesheet)
-    written.append(stylesheet)
+    written.extend(_copy_assets(output_dir))
 
     # Tells GitHub Pages to serve the files as-is instead of running Jekyll.
     nojekyll = output_dir / ".nojekyll"
     nojekyll.touch()
     written.append(nojekyll)
     return written
+
+
+def _copy_assets(output_dir: Path) -> list[Path]:
+    """Copy `assets/` verbatim into the output root: stylesheets and font files."""
+    shutil.copytree(ASSETS_DIR, output_dir, dirs_exist_ok=True)
+    return sorted(
+        output_dir / path.relative_to(ASSETS_DIR)
+        for path in ASSETS_DIR.rglob("*")
+        if path.is_file()
+    )
 
 
 def _reject_duplicate_names(terms: list[Term]) -> None:

@@ -24,6 +24,18 @@ def test_build_writes_pages_stylesheet_and_nojekyll(tmp_path):
     assert (out / ".nojekyll").exists()
 
 
+def test_build_copies_the_self_hosted_fonts(tmp_path):
+    terms, out = tmp_path / "terms", tmp_path / "_site"
+    write(terms, "api", "API")
+
+    build(terms, out)
+
+    assert "@font-face" in (out / "fonts.css").read_text(encoding="utf-8")
+    assert sorted(p.name for p in (out / "fonts").glob("*.woff2"))
+    # fonts.css sits next to fonts/, so its relative url() resolves from any page.
+    assert "url(fonts/" in (out / "fonts.css").read_text(encoding="utf-8")
+
+
 def test_build_removes_stale_output(tmp_path):
     terms, out = tmp_path / "terms", tmp_path / "_site"
     write(terms, "api", "API")

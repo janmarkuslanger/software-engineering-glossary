@@ -14,10 +14,14 @@ from .models import OTHER_LETTER, Term
 
 SITE_TITLE = "Software Engineering Glossary"
 SITE_TAGLINE = "A plain-language reference of software engineering terms."
+REPO_URL = "https://github.com/janmarkuslanger/software-engineering-glossary"
 LETTERS = tuple(string.ascii_uppercase) + (OTHER_LETTER,)
 
 INDEX_PAGE = "index.html"
 STYLESHEET = "style.css"
+
+# Self-hosted @font-face rules; see scripts/fetch_fonts.py.
+FONT_STYLESHEET = "fonts.css"
 
 _MARKDOWN = markdown.Markdown(extensions=["extra", "sane_lists", "smarty"])
 _TAGS = re.compile(r"<[^>]+>")
@@ -133,6 +137,7 @@ def _layout(path: str, title: str | None, heading: str, body: str) -> str:
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{html.escape(title or SITE_TITLE)}</title>
 <meta name="description" content="{html.escape(SITE_TAGLINE, quote=True)}">
+<link rel="stylesheet" href="{_link(path, FONT_STYLESHEET)}">
 <link rel="stylesheet" href="{_link(path, STYLESHEET)}">
 </head>
 <body>
@@ -144,7 +149,10 @@ def _layout(path: str, title: str | None, heading: str, body: str) -> str:
   {body}
 </main>
 <footer>
-  <p>Built from markdown files in <code>terms/</code>.</p>
+  <p>
+    Open source on <a href="{REPO_URL}" rel="noopener noreferrer">GitHub</a>.
+    Corrections and new terms are welcome.
+  </p>
 </footer>
 </body>
 </html>
